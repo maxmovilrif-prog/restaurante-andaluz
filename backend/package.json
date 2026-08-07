@@ -1,0 +1,25 @@
+{
+  "name": "restaurante-andaluz-backend",
+  "version": "1.0.0",
+  "description": "API backend for Restaurante Andaluz management system",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/db/seed.js",
+    "seed:fresh": "node src/db/seed.js --fresh"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "json2csv": "^6.0.0-alpha.2",
+    "multer": "^2.2.0",
+    "pdf-parse": "^2.4.5",
+    "pdfkit": "^0.15.0"
+  }
+}

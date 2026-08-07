@@ -1,0 +1,38 @@
+# Render Blueprint — convenience only. Field names can drift as Render's schema
+# evolves; if "New > Blueprint" rejects this file, follow the manual dashboard
+# steps in deploy/RENDER.md instead (same end result, just click-through).
+services:
+  - type: web
+    name: restaurante-andaluz-api
+    runtime: node
+    plan: starter # paid tier — required for the persistent disk below
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: CORS_ORIGINS
+        value: https://restauranteandaluz.es,https://www.restauranteandaluz.es
+    disk:
+      name: restaurante-andaluz-data
+      mountPath: /var/data
+      sizeGB: 1
+
+  - type: web
+    name: restaurante-andaluz-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      # Update after the API service's first deploy if Render renamed it
+      # (e.g. appended a suffix because the name was taken).
+      - key: VITE_API_URL
+        value: https://restaurante-andaluz-api.onrender.com/api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
