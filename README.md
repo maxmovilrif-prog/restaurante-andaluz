@@ -76,6 +76,9 @@ Registrar una factura con artículos vinculados al inventario (`stock_item_id`) 
 
 ## Despliegue en producción (dominio propio)
 
-Guía completa paso a paso (por qué VPS y no Render/Vercel/Railway, provisión, DNS, Nginx, PM2, HTTPS, backups): **[deploy/README.md](deploy/README.md)**.
+El hosting de Hostalia para `restauranteandaluz.es` es un plan compartido/website-builder (sin SSH, no ejecuta Node.js) — la ruta que aplica es:
 
-Resumen: `NODE_ENV=production` hace que `backend/src/app.js` sirva el frontend compilado (`npm run build`) desde el mismo proceso Node — un único origen, sin necesidad de CORS para la app en sí (probado localmente: `/`, `/api/health` y rutas internas como `/admin/inventario` responden `200`). `CORS_ORIGINS` en `backend/.env` solo importa si algún día separas frontend y backend en orígenes distintos.
+- **[deploy/RENDER.md](deploy/RENDER.md)** — frontend estático + backend Node en Render, dominio y DNS seguidos gestionándose en Hostalia. **Esta es la guía a seguir.**
+- [deploy/README.md](deploy/README.md) — alternativa con VPS propio (PM2 + Nginx + Certbot), válida solo si en algún momento contratas un VPS/Cloud Server con acceso root en vez del plan compartido actual.
+
+En el despliegue de Render, backend y frontend quedan en orígenes distintos (`*.onrender.com` / dominio propio), así que `CORS_ORIGINS` (backend) y `VITE_API_URL` (frontend, en build) sí son necesarios — están documentados en `deploy/RENDER.md`. `DATA_DIR` permite mover el archivo SQLite al disco persistente que monte cada plataforma (por defecto `backend/data`, sin necesidad de configurarlo en local).
