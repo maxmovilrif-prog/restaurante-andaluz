@@ -1,4 +1,4 @@
-# Despliegue a producción — restauranteandaluz.es
+# Despliegue a producción — andaluzmanager.com
 
 ## Por qué VPS y no Render / Railway / Vercel
 
@@ -14,7 +14,7 @@ Si en el futuro quieres escalar a Render/Railway igualmente, el paso previo ser�
 ## Resumen del plan
 
 1. Contratar/usar un VPS (Cloud Server) de Hostalia con Ubuntu.
-2. Apuntar el DNS de `restauranteandaluz.es` y `www.restauranteandaluz.es` a la IP de ese VPS.
+2. Apuntar el DNS de `andaluzmanager.com` y `www.andaluzmanager.com` a la IP de ese VPS.
 3. Instalar Node.js, Nginx, PM2 y Certbot en el VPS.
 4. Subir el proyecto, compilar el frontend, configurar `.env`, arrancar con PM2.
 5. Nginx hace de proxy inverso (puerto 80/443 → Node en 4000) y Certbot añade HTTPS gratis.
@@ -27,7 +27,7 @@ Al terminar el aprovisionamiento, Hostalia te mostrará la **IP pública** del s
 
 ## 2. DNS
 
-En el panel de DNS de Hostalia, sobre la zona `restauranteandaluz.es`, crea:
+En el panel de DNS de Hostalia, sobre la zona `andaluzmanager.com`, crea:
 
 | Tipo | Nombre | Valor                    |
 |------|--------|---------------------------|
@@ -82,7 +82,7 @@ Contenido de `backend/.env` en producción:
 ```
 PORT=4000
 NODE_ENV=production
-CORS_ORIGINS=https://restauranteandaluz.es,https://www.restauranteandaluz.es
+CORS_ORIGINS=https://andaluzmanager.com,https://www.andaluzmanager.com
 ```
 
 Inicializa la base de datos **vacía** (sin los datos de ejemplo de desarrollo) y anota el PIN de administrador que te genera — no se puede recuperar, solo cambiar después desde el panel:
@@ -109,22 +109,22 @@ curl http://localhost:4000/api/health   # debe devolver {"status":"ok"}
 ## 6. Nginx + HTTPS
 
 ```bash
-sudo cp deploy/nginx.conf /etc/nginx/sites-available/restauranteandaluz.es
-sudo ln -s /etc/nginx/sites-available/restauranteandaluz.es /etc/nginx/sites-enabled/
+sudo cp deploy/nginx.conf /etc/nginx/sites-available/andaluzmanager.com
+sudo ln -s /etc/nginx/sites-available/andaluzmanager.com /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 
 # Solo una vez el DNS ya haya propagado (paso 2):
-sudo certbot --nginx -d restauranteandaluz.es -d www.restauranteandaluz.es
+sudo certbot --nginx -d andaluzmanager.com -d www.andaluzmanager.com
 ```
 
 Certbot edita `nginx.conf` automáticamente para añadir el bloque HTTPS y el redirect `http → https`, y renueva el certificado solo (revisa con `sudo systemctl status certbot.timer`).
 
 ## 7. Verificación final
 
-- `https://restauranteandaluz.es/` → pantalla de selección de rol (Landing).
-- `https://restauranteandaluz.es/staff` → Modo Personal.
-- `https://restauranteandaluz.es/admin` → pide el PIN de administrador (el que generó `seed:fresh`).
+- `https://andaluzmanager.com/` → pantalla de selección de rol (Landing).
+- `https://andaluzmanager.com/staff` → Modo Personal.
+- `https://andaluzmanager.com/admin` → pide el PIN de administrador (el que generó `seed:fresh`).
 - Cambia el PIN de administrador cuanto antes: `POST /api/auth/admin/change-pin` (aún no tiene UI dedicada).
 
 ## Actualizar la app tras un cambio

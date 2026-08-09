@@ -20,7 +20,7 @@ git branch -M main
 git push -u origin main
 ```
 
-(El commit inicial ya está hecho localmente con identidad `Restaurante Andaluz <dev@restauranteandaluz.es>` — cámbiala con `git config user.name`/`user.email` antes de más commits si prefieres que aparezcan a tu nombre.)
+(El commit inicial ya está hecho localmente con identidad `Restaurante Andaluz <dev@andaluzmanager.com>` — cámbiala con `git config user.name`/`user.email` antes de más commits si prefieres que aparezcan a tu nombre.)
 
 ## 2. Backend: crear el Web Service en Render
 
@@ -40,7 +40,7 @@ Dashboard de Render → **New > Web Service** → conecta el repo `restaurante-a
 ```
 NODE_ENV=production
 DATA_DIR=/var/data
-CORS_ORIGINS=https://restauranteandaluz.es,https://www.restauranteandaluz.es
+CORS_ORIGINS=https://andaluzmanager.com,https://www.andaluzmanager.com
 ```
 
 **Disco persistente** (pestaña Disks → Add Disk): nombre `restaurante-andaluz-data`, **Mount Path** `/var/data`, tamaño 1 GB (de sobra para SQLite).
@@ -86,17 +86,17 @@ Deploy.
 
 ## 4. Dominio propio en el Static Site
 
-En el Static Site → **Settings > Custom Domains** → añade `www.restauranteandaluz.es`. Render te mostrará el registro CNAME exacto a crear (algo como apuntar `www` a `restaurante-andaluz-frontend.onrender.com`) — **copia el valor que te enseñe el propio panel de Render en ese momento**, no el de este documento, por si difiere.
+En el Static Site → **Settings > Custom Domains** → añade `www.andaluzmanager.com`. Render te mostrará el registro CNAME exacto a crear (algo como apuntar `www` a `restaurante-andaluz-frontend.onrender.com`) — **copia el valor que te enseñe el propio panel de Render en ese momento**, no el de este documento, por si difiere.
 
-Para el dominio raíz `restauranteandaluz.es` (sin `www`) hay dos caminos, de más a menos simple:
+Para el dominio raíz `andaluzmanager.com` (sin `www`) hay dos caminos, de más a menos simple:
 
-**A) Redirección de dominio en el propio panel de Hostalia** (recomendado): si tu Plan Dominio incluye una opción de "redirección/reenvío de dominio" (aparte de los registros DNS), úsala para redirigir `restauranteandaluz.es` → `https://www.restauranteandaluz.es`. Es lo más simple porque evita crear un registro A en la raíz.
+**A) Redirección de dominio en el propio panel de Hostalia** (recomendado): si tu Plan Dominio incluye una opción de "redirección/reenvío de dominio" (aparte de los registros DNS), úsala para redirigir `andaluzmanager.com` → `https://www.andaluzmanager.com`. Es lo más simple porque evita crear un registro A en la raíz.
 
-**B) Registro A en la raíz**: si Hostalia no ofrece redirección y prefieres que el dominio raíz funcione directamente, añade también `restauranteandaluz.es` como Custom Domain en Render — el panel te dará una IP para un registro **A** en `@`. Usa esa IP exacta, no inventes una.
+**B) Registro A en la raíz**: si Hostalia no ofrece redirección y prefieres que el dominio raíz funcione directamente, añade también `andaluzmanager.com` como Custom Domain en Render — el panel te dará una IP para un registro **A** en `@`. Usa esa IP exacta, no inventes una.
 
 ## 5. Registros DNS en Hostalia
 
-Panel de Hostalia → gestión DNS de `restauranteandaluz.es`:
+Panel de Hostalia → gestión DNS de `andaluzmanager.com`:
 
 | Tipo | Nombre | Valor |
 |---|---|---|
@@ -107,9 +107,9 @@ La propagación puede tardar de minutos a un par de horas. Render emite el certi
 
 ## 6. Verificación
 
-- `https://www.restauranteandaluz.es/` → Landing (selector de rol).
-- `https://www.restauranteandaluz.es/staff` → Modo Personal.
-- `https://www.restauranteandaluz.es/admin` → pide el PIN de administrador (el que generó `seed:fresh` en el paso 2).
+- `https://www.andaluzmanager.com/` → Landing (selector de rol).
+- `https://www.andaluzmanager.com/staff` → Modo Personal.
+- `https://www.andaluzmanager.com/admin` → pide el PIN de administrador (el que generó `seed:fresh` en el paso 2).
 - Revisa en las DevTools del navegador (pestaña Network) que las llamadas a `/api/...` van contra `restaurante-andaluz-api.onrender.com` y devuelven 200, no un error de CORS.
 
 ## Actualizar la app tras un cambio

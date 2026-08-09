@@ -76,7 +76,7 @@ Registrar una factura con artículos vinculados al inventario (`stock_item_id`) 
 
 ## Despliegue en producción (dominio propio)
 
-El hosting de Hostalia para `restauranteandaluz.es` es un plan compartido/website-builder (sin SSH, no ejecuta Node.js) — la ruta que aplica es:
+El hosting de Hostalia para `andaluzmanager.com` es un plan compartido/website-builder (sin SSH, no ejecuta Node.js) — la ruta que aplica es:
 
 - **[deploy/RENDER.md](deploy/RENDER.md)** — frontend estático + backend Node en Render, dominio y DNS seguidos gestionándose en Hostalia. **Esta es la guía a seguir.**
 - [deploy/README.md](deploy/README.md) — alternativa con VPS propio (PM2 + Nginx + Certbot), válida solo si en algún momento contratas un VPS/Cloud Server con acceso root en vez del plan compartido actual.

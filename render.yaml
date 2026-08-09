@@ -15,7 +15,7 @@ services:
       - key: DATA_DIR
         value: /var/data
       - key: CORS_ORIGINS
-        value: https://restauranteandaluz.es,https://www.restauranteandaluz.es
+        value: https://andaluzmanager.com,https://www.andaluzmanager.com
     disk:
       name: restaurante-andaluz-data
       mountPath: /var/data
