@@ -8,9 +8,6 @@ function loadOrCreateSecret() {
   if (fs.existsSync(secretPath)) {
     return fs.readFileSync(secretPath, 'utf8').trim();
   }
-  if (!fs.existsSync(path.dirname(secretPath))) {
-    fs.mkdirSync(path.dirname(secretPath), { recursive: true });
-  }
   const secret = crypto.randomBytes(32).toString('hex');
   fs.writeFileSync(secretPath, secret, { mode: 0o600 });
   return secret;

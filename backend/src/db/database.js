@@ -1,14 +1,8 @@
 const { DatabaseSync } = require('node:sqlite');
 const path = require('node:path');
-const fs = require('node:fs');
 const getDataDir = require('../utils/dataDir');
 
-const dataDir = getDataDir();
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
-
-const dbPath = path.join(dataDir, 'restaurante.db');
+const dbPath = path.join(getDataDir(), 'restaurante.db');
 const db = new DatabaseSync(dbPath);
 
 db.exec('PRAGMA foreign_keys = ON;');
