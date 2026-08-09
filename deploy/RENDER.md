@@ -40,7 +40,7 @@ Dashboard de Render → **New > Web Service** → conecta el repo `restaurante-a
 ```
 NODE_ENV=production
 DATA_DIR=/var/data
-CORS_ORIGINS=https://andaluzmanager.com,https://www.andaluzmanager.com
+CORS_ORIGINS=https://andaluzmanager.com,https://www.andaluzmanager.com,https://resturanteandaluz.es,https://www.resturanteandaluz.es
 ```
 
 **Disco persistente** (pestaña Disks → Add Disk): nombre `restaurante-andaluz-data`, **Mount Path** `/var/data`, tamaño 1 GB (de sobra para SQLite).
@@ -88,6 +88,8 @@ Deploy.
 
 En el Static Site → **Settings > Custom Domains** → añade `www.andaluzmanager.com`. Render te mostrará el registro CNAME exacto a crear (algo como apuntar `www` a `restaurante-andaluz-frontend.onrender.com`) — **copia el valor que te enseñe el propio panel de Render en ese momento**, no el de este documento, por si difiere.
 
+La app responde también en `resturanteandaluz.es` / `www.resturanteandaluz.es` (segundo dominio, ya añadido y verificado como Custom Domain en Render y con su DNS en Hostalia apuntando igual que el paso 5) — repite el mismo proceso de Custom Domain + CNAME/A para ese dominio si aún no lo has hecho.
+
 Para el dominio raíz `andaluzmanager.com` (sin `www`) hay dos caminos, de más a menos simple:
 
 **A) Redirección de dominio en el propio panel de Hostalia** (recomendado): si tu Plan Dominio incluye una opción de "redirección/reenvío de dominio" (aparte de los registros DNS), úsala para redirigir `andaluzmanager.com` → `https://www.andaluzmanager.com`. Es lo más simple porque evita crear un registro A en la raíz.
@@ -110,6 +112,7 @@ La propagación puede tardar de minutos a un par de horas. Render emite el certi
 - `https://www.andaluzmanager.com/` → Landing (selector de rol).
 - `https://www.andaluzmanager.com/staff` → Modo Personal.
 - `https://www.andaluzmanager.com/admin` → pide el PIN de administrador (el que generó `seed:fresh` en el paso 2).
+- Repite lo mismo en `https://www.resturanteandaluz.es/` (segundo dominio verificado).
 - Revisa en las DevTools del navegador (pestaña Network) que las llamadas a `/api/...` van contra `restaurante-andaluz-api.onrender.com` y devuelven 200, no un error de CORS.
 
 ## Actualizar la app tras un cambio
