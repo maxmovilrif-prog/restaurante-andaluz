@@ -5,21 +5,18 @@ services:
   - type: web
     name: restaurante-andaluz-api
     runtime: node
-    plan: starter # paid tier — required for the persistent disk below
+    plan: free # no persistent disk on this plan — DATA_DIR is left unset so the
+    # backend falls back to its local backend/data folder (see backend/src/utils/dataDir.js).
+    # Data will NOT survive a redeploy on this plan; upgrade to a paid plan and add a
+    # Disk (mountPath /var/data) + a DATA_DIR=/var/data env var if you need persistence.
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
-      - key: DATA_DIR
-        value: /var/data
       - key: CORS_ORIGINS
         value: https://andaluzmanager.com,https://www.andaluzmanager.com,https://resturanteandaluz.es,https://www.resturanteandaluz.es
-    disk:
-      name: restaurante-andaluz-data
-      mountPath: /var/data
-      sizeGB: 1
 
   - type: web
     name: restaurante-andaluz-frontend

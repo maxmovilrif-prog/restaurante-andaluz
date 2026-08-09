@@ -2,7 +2,7 @@
 
 Tu hosting de Hostalia es un plan compartido/website-builder: sin SSH, sin acceso root, no ejecuta procesos Node.js persistentes. La ruta más simple es alojar la app en **Render** (frontend estático + backend Node con disco persistente para el SQLite) y dejar que **Hostalia siga gestionando el dominio y el DNS** — apuntando los registros hacia Render.
 
-Coste aproximado: el sitio estático del frontend es gratis en Render; el backend necesita el plan de pago más bajo (por el disco persistente que necesita el `.db` de SQLite) — confirma el precio actual en render.com/pricing antes de contratar, no lo doy aquí porque puede haber cambiado.
+Coste aproximado: el sitio estático del frontend es gratis en Render. El backend puede correr en el **plan Free** (gratis) para probar la app, pero ese plan no tiene disco persistente — el archivo `.db` de SQLite vive en el filesystem efímero del contenedor y **se pierde en cada redeploy o reinicio**. Para que los datos sobrevivan hace falta el plan de pago más bajo que permita añadir un disco persistente — confirma el precio actual en render.com/pricing antes de contratar, no lo doy aquí porque puede haber cambiado.
 
 ## 0. Requisitos previos
 
@@ -33,17 +33,18 @@ Dashboard de Render → **New > Web Service** → conecta el repo `restaurante-a
 | Runtime | Node |
 | Build Command | `npm install` |
 | Start Command | `npm start` |
-| Plan | El más barato que permita añadir disco persistente (no el free — ese tiene disco efímero) |
+| Plan | `Free` para probar (datos no persistentes), o el más barato que permita añadir disco persistente si quieres que los datos sobrevivan a un redeploy |
 
 **Environment Variables** (pestaña Environment):
 
 ```
 NODE_ENV=production
-DATA_DIR=/var/data
 CORS_ORIGINS=https://andaluzmanager.com,https://www.andaluzmanager.com,https://resturanteandaluz.es,https://www.resturanteandaluz.es
 ```
 
-**Disco persistente** (pestaña Disks → Add Disk): nombre `restaurante-andaluz-data`, **Mount Path** `/var/data`, tamaño 1 GB (de sobra para SQLite).
+No añadas `DATA_DIR` en el plan Free: no hay disco donde apunte y el backend fallaría al arrancar (`EACCES` al crear `/var/data`). Sin esa variable, el código usa automáticamente su carpeta local `backend/data` (ver `backend/src/utils/dataDir.js`) — funciona, solo que no persiste entre redeploys.
+
+**Solo si tienes plan de pago con disco** (pestaña Disks → Add Disk): nombre `restaurante-andaluz-data`, **Mount Path** `/var/data`, tamaño 1 GB (de sobra para SQLite) — y entonces sí añade `DATA_DIR=/var/data` a las Environment Variables de arriba para que el backend lo use.
 
 Deploy. Cuando termine, apunta la URL que te da Render (algo como `https://restaurante-andaluz-api.onrender.com`) — la necesitas en el paso siguiente.
 

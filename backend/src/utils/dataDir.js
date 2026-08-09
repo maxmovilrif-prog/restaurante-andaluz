@@ -1,6 +1,10 @@
 const path = require('node:path');
 const fs = require('node:fs');
 
+// Deliberately __dirname-based, not process.cwd(): cwd varies depending on how
+// the process is launched (e.g. `npm run dev --prefix backend` from the repo
+// root leaves cwd at the repo root, not backend/), which would scatter the .db
+// file outside backend/data — the only path .gitignore actually excludes.
 const localDataDir = path.join(__dirname, '..', '..', 'data');
 
 // Override with DATA_DIR when a persistent disk is mounted elsewhere — e.g. a
