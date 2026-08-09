@@ -60,7 +60,9 @@ app.use('/api', (req, res) => {
 const frontendDist = path.join(__dirname, '..', '..', 'frontend', 'dist');
 if (process.env.NODE_ENV === 'production' && fs.existsSync(frontendDist)) {
   app.use(express.static(frontendDist));
-  app.get(/.*/, (req, res) => {
+  // Catch-all so client-side routes (React Router) resolve to index.html. Placed after
+  // all /api routes above (including the /api 404 handler), so it never intercepts them.
+  app.get('*', (req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
   });
 } else {
