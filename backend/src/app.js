@@ -63,6 +63,13 @@ if (process.env.NODE_ENV === 'production' && fs.existsSync(frontendDist)) {
   app.get(/.*/, (req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
   });
+} else {
+  // No frontend build alongside this process (e.g. backend deployed as its own
+  // Render service, frontend as a separate Static Site) — respond on "/" instead
+  // of falling through to Express's bare "Cannot GET /" 404.
+  app.get('/', (req, res) => {
+    res.json({ status: 'ok', message: 'Restaurante Andaluz API', health: '/api/health' });
+  });
 }
 
 // eslint-disable-next-line no-unused-vars
