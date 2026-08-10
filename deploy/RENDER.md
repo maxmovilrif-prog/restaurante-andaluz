@@ -62,6 +62,15 @@ npm run seed:fresh --prefix backend
 
 Apunta el PIN de administrador de 4 dígitos que imprime — no se puede recuperar, solo cambiar después.
 
+Si lo pierdes (o quieres fijarlo a un valor conocido) sin borrar el resto de los datos, desde la misma pestaña **Shell**:
+
+```bash
+npm run reset-admin-pin --prefix backend           # lo deja en 1234
+npm run reset-admin-pin --prefix backend -- 5678   # o un PIN propio de 4-6 dígitos
+```
+
+`1234` es fácil de adivinar — cámbialo desde el Panel de Administración justo después de entrar.
+
 Si ya tenías un Static Site separado (`restaurante-andaluz-frontend`) de una configuración anterior de dos servicios, ya no hace falta — puedes borrarlo desde su dashboard en Render.
 
 ## 3. Dominio propio en el Web Service
