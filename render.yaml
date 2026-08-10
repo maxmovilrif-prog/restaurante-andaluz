@@ -1,6 +1,11 @@
 # Render Blueprint — convenience only. Field names can drift as Render's schema
 # evolves; if "New > Blueprint" rejects this file, follow the manual dashboard
 # steps in deploy/RENDER.md instead (same end result, just click-through).
+#
+# Single service: the Express backend builds and serves the React frontend itself
+# (frontend/dist), same-origin, no separate Static Site — see the static-serving
+# block in backend/src/app.js. Root Directory is the repo root (not backend/) so
+# the build command can reach both backend/ and frontend/.
 services:
   - type: web
     name: restaurante-andaluz-api
@@ -9,27 +14,13 @@ services:
     # backend falls back to its local backend/data folder (see backend/src/utils/dataDir.js).
     # Data will NOT survive a redeploy on this plan; upgrade to a paid plan and add a
     # Disk (mountPath /var/data) + a DATA_DIR=/var/data env var if you need persistence.
-    rootDir: backend
-    buildCommand: npm install
+    buildCommand: npm run install:all && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
+      # Same-origin in this single-service setup, but kept anyway: some browsers still
+      # send an Origin header on same-origin POST/PUT/DELETE, which the backend's CORS
+      # check would otherwise reject.
       - key: CORS_ORIGINS
         value: https://andaluzmanager.com,https://www.andaluzmanager.com,https://resturanteandaluz.es,https://www.resturanteandaluz.es
-
-  - type: web
-    name: restaurante-andaluz-frontend
-    runtime: static
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    envVars:
-      # Update after the API service's first deploy if Render renamed it
-      # (e.g. appended a suffix because the name was taken).
-      - key: VITE_API_URL
-        value: https://restaurante-andaluz-api.onrender.com/api
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html

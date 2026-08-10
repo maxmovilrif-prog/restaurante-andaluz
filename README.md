@@ -78,7 +78,7 @@ Registrar una factura con artículos vinculados al inventario (`stock_item_id`) 
 
 El hosting de Hostalia para `andaluzmanager.com` es un plan compartido/website-builder (sin SSH, no ejecuta Node.js) — la ruta que aplica es:
 
-- **[deploy/RENDER.md](deploy/RENDER.md)** — frontend estático + backend Node en Render, dominio y DNS seguidos gestionándose en Hostalia. **Esta es la guía a seguir.**
+- **[deploy/RENDER.md](deploy/RENDER.md)** — un único Web Service en Render (el backend compila y sirve el frontend él mismo, mismo origen), dominio y DNS seguidos gestionándose en Hostalia. **Esta es la guía a seguir.**
 - [deploy/README.md](deploy/README.md) — alternativa con VPS propio (PM2 + Nginx + Certbot), válida solo si en algún momento contratas un VPS/Cloud Server con acceso root en vez del plan compartido actual.
 
-En el despliegue de Render, backend y frontend quedan en orígenes distintos (`*.onrender.com` / dominio propio), así que `CORS_ORIGINS` (backend) y `VITE_API_URL` (frontend, en build) sí son necesarios — están documentados en `deploy/RENDER.md`. `DATA_DIR` permite mover el archivo SQLite al disco persistente que monte cada plataforma (por defecto `backend/data`, sin necesidad de configurarlo en local).
+En el despliegue de Render, backend y frontend corren en el mismo proceso y origen, así que `CORS_ORIGINS` no es estrictamente necesario para la app en sí (se deja igualmente como red de seguridad — algunos navegadores añaden cabecera `Origin` en peticiones same-origin) y `VITE_API_URL` puede quedar sin definir (usa `/api` por defecto). `DATA_DIR` permite mover el archivo SQLite al disco persistente que monte cada plataforma (por defecto `backend/data`, sin necesidad de configurarlo en local) — solo aplica si el plan de Render tiene disco persistente; en el plan Free se deja sin definir. Todo esto está documentado en `deploy/RENDER.md`.
