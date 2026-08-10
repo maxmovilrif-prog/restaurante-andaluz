@@ -37,6 +37,8 @@ Dashboard de Render → **New > Web Service** → conecta el repo `restaurante-a
 
 El Build Command instala dependencias de `backend/` y `frontend/` y compila el frontend a `frontend/dist`; el Start Command arranca el backend (`backend/src/server.js`), que en producción sirve ese `frontend/dist` él mismo — mismo proceso, mismo origen, ver `backend/src/app.js`.
 
+Si el **Root Directory** del servicio se quedó como `backend` de una configuración anterior (o `npm start`/`npm run build` fallan con `Missing script`), no hace falta corregirlo a mano: `backend/package.json` también tiene su propio script `build` que compila `frontend/dist` usando una ruta relativa (`../frontend`), así que el build funciona igual venga el comando desde la raíz del repo o desde `backend/`.
+
 **Environment Variables** (pestaña Environment):
 
 ```
